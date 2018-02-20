@@ -30,7 +30,8 @@
                 }
 
                 if ($is_unique == true) {
-                    $result = pg_query($db,"INSERT INTO users VALUES (default, '$username', '$password')");
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                    $result = pg_query($db,"INSERT INTO users VALUES (default, '$username', '$hashed_password')");
                     header("location: index.php");
                 }
             }

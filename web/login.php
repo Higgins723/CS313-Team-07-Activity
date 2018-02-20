@@ -10,14 +10,20 @@
             $username = $_POST['username'];
             $password = $_POST['password'];
             $db = pg_connect("host=ec2-54-163-234-99.compute-1.amazonaws.com port=5432 dbname=ddq8lql4jjo099 user=hiewrduczohyvi password=5351c4f69d1cd32ea6c8271edf60cee446173a8857462f425fa86ba37b8b652c");
-            $result = pg_query($db,"SELECT * FROM users WHERE username = '$username' AND password = '$password'");
+            $result = pg_query($db,"SELECT * FROM users WHERE username = '$username'");
             $rows = pg_num_rows($result);
             if ($rows == 1) {
-                $_SESSION["user"] = $username;
                 while($row=pg_fetch_assoc($result)) {
-                    $_SESSION["userId"] = $row['id'];
+                    if(password_verify($password, $row['password'])) {
+                        $_SESSION["userId"] = $row['id'];
+                        $_SESSION["user"] = $username;
+                        header("location: profile.php");
+                    }
+                    else {
+                        $error = "Username or Password is incorrect";
+                        break;
+                    }
                 }
-                header("location: profile.php");
             }
             else {
                 $error = "Username or Password is incorrect";

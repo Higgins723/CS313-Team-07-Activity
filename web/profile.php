@@ -1,7 +1,6 @@
 <?php
     include("includes/header.php");
     include("login.php");
-    include("manageItems.php");
 
     // if not logged in redirect to index
     if(!isset($_SESSION["userId"])) {
